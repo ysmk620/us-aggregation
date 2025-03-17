@@ -1,0 +1,37 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Sheet1"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Option Explicit
+Private Sub Worksheet_Change(ByVal Target As Range)
+    ' 変更された範囲が貼り付けられたデータかを判定
+    Dim rng As Range
+    Dim PasteRange As Range
+    Dim IntersectRange As Range
+    
+    ' 貼り付けを監視する範囲
+    Set PasteRange = Me.Range("A1:AH3000")
+    
+    ' 貼り付けられた範囲が監視範囲内の場合
+    Set IntersectRange = Intersect(Target, PasteRange)
+    If Not IntersectRange Is Nothing Then
+        Application.EnableEvents = False ' イベントの連鎖を防ぐ
+        On Error GoTo Cleanup
+        
+        ' マクロの処理を実行
+        Call 尿沈渣集計
+
+Cleanup:
+        Application.EnableEvents = True ' イベントを再度有効化
+    
+    End If
+    
+    
+
+End Sub
+
